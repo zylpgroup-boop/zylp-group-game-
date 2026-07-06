@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zylp Group Tic Tac Toe</title>
+
+<style>
+body{
+    margin:0;
+    background:#020617;
+    font-family:Arial, Helvetica, sans-serif;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    text-align:center;
+}
+
+h1{
+    margin-bottom:15px;
+    color:#38bdf8;
+}
+
+.board{
+    display:grid;
+    grid-template-columns:repeat(3,100px);
+    grid-gap:10px;
+    justify-content:center;
+}
+
+.cell{
+    width:100px;
+    height:100px;
+    background:#0f172a;
+    border-radius:12px;
+    font-size:48px;
+    font-weight:bold;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.cell:hover{
+    background:#1e293b;
+}
+
+.status{
+    margin-top:15px;
+    font-size:18px;
+}
+
+button{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#22d3ee;
+    color:#000;
+    font-size:16px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>❌⭕ Zylp Group Tic Tac Toe</h1>
+
+    <div class="board" id="board">
+        <div class="cell" data-i="0"></div>
+        <div class="cell" data-i="1"></div>
+        <div class="cell" data-i="2"></div>
+        <div class="cell" data-i="3"></div>
+        <div class="cell" data-i="4"></div>
+        <div class="cell" data-i="5"></div>
+        <div class="cell" data-i="6"></div>
+        <div class="cell" data-i="7"></div>
+        <div class="cell" data-i="8"></div>
+    </div>
+
+    <div class="status" id="status">Player ❌ Turn</div>
+    <button onclick="resetGame()">Restart</button>
+</div>
+
+<script>
+let board = ["","","","","","","","",""];
+let player = "❌";
+let gameOver = false;
+
+const winPatterns = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+];
+
+document.querySelectorAll(".cell").forEach(cell=>{
+    cell.onclick = ()=>{
+        const i = cell.dataset.i;
+        if(board[i] || gameOver) return;
+
+        board[i] = player;
+        cell.textContent = player;
+
+        if(checkWin()){
+            document.getElementById("status").innerText =
+                `Player ${player} Wins 🎉`;
+            gameOver = true;
+        }else if(board.every(c=>c)){
+            document.getElementById("status").innerText =
+                "Draw 🤝";
+            gameOver = true;
+        }else{
+            player = player === "❌" ? "⭕" : "❌";
+            document.getElementById("status").innerText =
+                `Player ${player} Turn`;
+        }
+    };
+});
+
+function checkWin(){
+    return winPatterns.some(p =>
+        p.every(i => board[i] === player)
+    );
+}
+
+function resetGame(){
+    board = ["","","","","","","","",""];
+    player = "❌";
+    gameOver = false;
+    document.getElementById("status").innerText = "Player ❌ Turn";
+    document.querySelectorAll(".cell").forEach(c=>c.textContent="");
+}
+</script>
+
+</body>
+</html>
